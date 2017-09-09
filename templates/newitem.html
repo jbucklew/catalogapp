@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+
+    <title>Catalog App</title>
+</head>
+<body>
+    <div class="container">
+        <!-- navbar -->
+        <nav class="navbar navbar-light navbar-expand" style="background-color: #e3f2fd;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand mr-auto" href="{{url_for('showCategories')}}">Catalog App</a>
+            {% if not user_logged_in %}
+            <a href="{{url_for('showLogin')}}" type="button" class="btn btn-secondary navbar-right">Login</a>
+            {% else %}
+            <a href="{{url_for('gdisconnect')}}" type="button" class="btn btn-secondary">Logout</a>
+            {% endif %}
+        </nav>
+
+        <!-- breadcrumbs -->
+        <div class="row">
+            <div class="col-sm-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{url_for('showCategories')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('showCategoryItems', category_name=category_name)}}">{{category_name}}</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- new item form -->
+        <div class="row justify-content-center">
+            <div class="col-sm-3">
+                <h4>New Item</h4>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <form action="{{url_for('newItem', category_name=category_name)}}" method="post">
+
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" size="30" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea name="description" class="form-control" rows="2" maxlength="500"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{url_for('showCategoryItems', category_name=category_name)}}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

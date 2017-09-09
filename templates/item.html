@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+
+    <title>Catalog App</title>
+</head>
+<body>
+    <div class="container">
+        <!-- navbar -->
+        <nav class="navbar navbar-light navbar-expand" style="background-color: #e3f2fd;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand mr-auto" href="{{url_for('showCategories')}}">Catalog App</a>
+            {% if not user_logged_in %}
+            <a href="{{url_for('showLogin')}}" type="button" class="btn btn-secondary navbar-right">Login</a>
+            {% else %}
+            <a href="{{url_for('gdisconnect')}}" type="button" class="btn btn-secondary">Logout</a>
+            {% endif %}
+        </nav>
+
+        <!-- breadcrumbs -->
+        <div class="row">
+            <div class="col-sm-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{url_for('showCategories')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('showCategoryItems', category_name=category_name)}}">{{category_name}}</a></li>
+                    <li class="breadcrumb-item active">{{item.name}}</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- flashed messages -->
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'error' %}
+                                <div class="alert alert-danger" role="alert">
+                                    <p class="text-center text-flash">{{message}}</p>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success" role="alert">
+                                    <p class="text-center text-flash">{{message}}</p>
+                                </div>
+                            {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <!-- display item information -->
+        <div class="row justify-content-center">
+            <div class="col-sm-8 display-box">
+                <h4>{{item.name}}</h4>
+                <p>
+                    {{item.description}}
+                </p>
+                {% if user_logged_in and can_edit %}
+                <a href="{{url_for('editItem', category_name=category_name, item_name=item.name)}}" class="btn btn-primary">Edit</a>
+                <a href="{{url_for('deleteItem', category_name=category_name, item_name=item.name)}}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
